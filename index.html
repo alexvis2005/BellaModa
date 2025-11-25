@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BellaModa - Premium Brand Fashion</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <h1>Bella<span>Moda</span></h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#catalog">Catalog</a></li>
+                <li><a href="#brands">Brands</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="btn-auth" onclick="toggleAuthModal()">Login</button>
+                <button class="btn-cart" onclick="toggleCart()">
+                    🛒 <span id="cart-count">0</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="toggleAuthModal()">&times;</span>
+            <div class="auth-tabs">
+                <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+                <button class="tab-btn" onclick="switchTab('register')">Register</button>
+                <button class="tab-btn" onclick="switchTab('admin')">Admin</button>
+            </div>
+            
+            <form id="loginForm" class="auth-form active">
+                <h3>Welcome Back</h3>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit" class="btn-primary">Sign In</button>
+            </form>
+            
+            <form id="registerForm" class="auth-form">
+                <h3>Create Account</h3>
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <input type="password" placeholder="Confirm Password" required>
+                <button type="submit" class="btn-primary">Create Account</button>
+            </form>
+
+            <form id="adminForm" class="auth-form">
+                <h3>Admin Access</h3>
+                <input type="email" placeholder="Admin Email" required>
+                <input type="password" placeholder="Admin Password" required>
+                <button type="submit" class="btn-primary">Admin Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h2>ELEVATE YOUR STYLE</h2>
+                <p>Discover premium brands and exclusive collections</p>
+                <button class="btn-hero" onclick="scrollToCatalog()">SHOP NOW</button>
+            </div>
+        </section>
+
+        <!-- Catalog Section -->
+        <section id="catalog" class="catalog">
+            <div class="container">
+                <h2 class="section-title">OUR COLLECTION</h2>
+                
+                <!-- Filters -->
+                <div class="filters">
+                    <select id="brandFilter" onchange="filterProducts()">
+                        <option value="all">All Brands</option>
+                        <option value="nike">Nike</option>
+                        <option value="adidas">Adidas</option>
+                        <option value="gucci">Gucci</option>
+                        <option value="prada">Prada</option>
+                        <option value="balenciaga">Balenciaga</option>
+                    </select>
+                    
+                    <select id="sortFilter" onchange="sortProducts()">
+                        <option value="default">Sort By</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="name">Name A-Z</option>
+                    </select>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="products-grid" id="productsGrid">
+                    <!-- Products will be loaded here by JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="close-cart" onclick="toggleCart()">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be loaded here -->
+        </div>
+        <div class="cart-total">
+            <p>Total: $<span id="cartTotal">0.00</span></p>
+            <button class="btn-checkout" onclick="showPaymentModal()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Product View Modal -->
+    <div id="productModal" class="modal product-modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeProductModal()">&times;</span>
+            <div id="productModalContent">
+                <!-- Product details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePaymentModal()">&times;</span>
+            <h3>Complete Your Purchase</h3>
+            <div class="payment-options">
+                <div class="payment-method">
+                    <h4>Telegram Payment</h4>
+                    <p>Pay securely via our Telegram bot</p>
+                    <a href="https://t.me/your_payment_bot" class="btn-telegram" target="_blank">
+                        💳 Pay with Telegram
+                    </a>
+                </div>
+                <div class="order-summary">
+                    <h4>Order Summary</h4>
+                    <div id="orderSummary">
+                        <!-- Order items will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel (hidden by default) -->
+    <div id="adminPanel" class="admin-panel">
+        <div class="admin-header">
+            <h2>Admin Panel</h2>
+            <button onclick="toggleAdminPanel()">Close Admin</button>
+        </div>
+        <div class="admin-content">
+            <div class="admin-section">
+                <h3>Add New Product</h3>
+                <form id="addProductForm">
+                    <input type="text" placeholder="Product Name" required>
+                    <input type="number" placeholder="Price ($)" step="0.01" required>
+                    <select required>
+                        <option value="">Select Brand</option>
+                        <option value="nike">Nike</option>
+                        <option value="adidas">Adidas</option>
+                        <option value="gucci">Gucci</option>
+                        <option value="prada">Prada</option>
+                    </select>
+                    <input type="text" placeholder="Image URL" required>
+                    <textarea placeholder="Description"></textarea>
+                    <button type="submit" class="btn-primary">Add Product</button>
+                </form>
+            </div>
+            <div class="admin-section">
+                <h3>Manage Products</h3>
+                <div id="adminProductsList">
+                    <!-- Admin products list -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
